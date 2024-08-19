@@ -1,8 +1,14 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  /* Start -> Custom. */
+  /* padding: 2rem; */
+  padding: 0 auto;
+  /* End <- Custom. */
   text-align: center;
+  /* Start -> full width. */
+  width: 98%;
+  /* End <- full width. */
 }
 
 .logo {
