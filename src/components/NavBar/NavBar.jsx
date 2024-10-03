@@ -1,33 +1,35 @@
 import styled from "styled-components"
 import CartWidget from "../CartWidget/CartWidget"
+import { useState, useEffect } from "react"
+import { getMenuItems } from "../../functions"
+import { Link } from "react-router-dom"
+import logo from '../../assets/logo-512x256_trans.png'
 
-function NavBar( props ) {
+function NavBar( {amount} ) {
+
+    const [categorias, setCategorias] = useState([])
+
+    useEffect( () => {
+        setCategorias( getMenuItems() )
+    }, [] )
 
     return (
         <DivNavBar>
-            <div id="NavBarTitle">
-                <H1Header>Ecommerce</H1Header>
-            </div>
             <DivNavBarMainBar>
                 <DivLogo>
-                    <img src="src/assets/logo-512x256_trans.png" alt="cat-pack" height={60} width={120} />
+                    <Link to={'/'} >
+                        <img src={logo} alt="cat-pack" height={70} width={140} />
+                    </Link>
                 </DivLogo>
                 <UlNavBarLink>
-                    <LiNavBar>
-                        <AMenuItem>Link 1</AMenuItem>
-                    </LiNavBar>
-                    <LiNavBar>
-                        <AMenuItem>link 2</AMenuItem>
-                    </LiNavBar>
-                    <LiNavBar>
-                        <AMenuItem>link 3</AMenuItem>
-                    </LiNavBar>
-                    <LiNavBar>
-                        <AMenuItem>link 4</AMenuItem>
-                    </LiNavBar>
+                    { categorias.map( (categoria) => (
+                        <LiNavBar key={categoria}>
+                            <LinkMenuItem to={`/category/${categoria}`}>{categoria}</LinkMenuItem>
+                        </LiNavBar>
+                    ) ) }
                 </UlNavBarLink>
                 <DivPurchaseInformation>
-                    <CartWidget itemsQuantity={ props.products.length } />
+                    <CartWidget itemsQuantity={ amount } />
                 </DivPurchaseInformation>
             </DivNavBarMainBar>
         </DivNavBar>
@@ -37,10 +39,8 @@ function NavBar( props ) {
 
 const DivNavBar = styled.div`
     width: 100%;
-    border-bottom: 4px solid yellow;
-    border-radius: 0px;
-    padding-bottom: 5px;
-    margin: auto;
+    padding-top: 5px;
+    margin: 10px auto;
 `
 
 const H1Header = styled.h1`
@@ -51,8 +51,6 @@ const DivNavBarMainBar = styled.div`
     /* Grid */
     display: grid;
     grid-template-columns: repeat( 6, 1fr );
-    /* grid-gap: 5px; */
-    /* grid-auto-rows: minmax( 10px, auto ) */
 `
 
 const DivLogo = styled.div`
@@ -72,12 +70,15 @@ const LiNavBar = styled.li`
     display: inline;
 `
 
-const AMenuItem = styled.a`
+const LinkMenuItem = styled(Link)`
     background-color: gray;
     border-radius: 10px;
     color: white;
     margin: auto 10px;
     padding: 10px;
+    &:hover {
+        cursor: pointer;
+    }
 `
 
 const DivPurchaseInformation = styled.div`
