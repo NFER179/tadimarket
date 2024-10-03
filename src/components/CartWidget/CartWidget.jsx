@@ -1,13 +1,19 @@
 import React from "react"
 import { FaShoppingCart } from 'react-icons/fa'
 import styled from "styled-components"
+import { useCartContext } from "../../context/CartContext"
+import { Link } from "react-router-dom"
 
-function CartWidget( props ) {
+function CartWidget() {
+
+    const { cart } = useCartContext()
 
     return (
         <DivCartWidget>
-            <FaShoppingCart size={24} />
-            { props.itemsQuantity > 0 ? <SpanItemsQuantity>{ props.itemsQuantity }</SpanItemsQuantity> : <span></span> }
+            <Link to='/cart'>
+                <FaShoppingCart size={24} color="black"/>
+                { cart.length > 0 ? <SpanItemsQuantity>{ cart.length }</SpanItemsQuantity> : <span></span> }
+            </Link>
         </DivCartWidget>
     )
 }
