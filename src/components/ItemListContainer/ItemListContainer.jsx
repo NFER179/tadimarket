@@ -1,122 +1,57 @@
 import { useEffect, useState } from "react"
 import styled from "styled-components"
-import { getYuGiOhAllCards, getYuGiOhMonsterCards, getYuGiOhSpellsCards, getYuGiOhTrapCards } from "../../asyncMock"
 import ItemList from "../ItemList/ItemList"
 import { useParams } from "react-router-dom"
+import { getProducts } from "../../firebase/db"
+import ItemListLoading from "./ItemListLoading/ItemListLoading"
 
-function ItemListContainer(props) {
+function ItemListContainer() {
 
-    const [cards, setCards] = useState([])
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
+    const [items, setItems] = useState([])
 
-    /* Get params in URL */
-    const { typeId } = useParams()
-
-    //Get all cards of YU-GI-OH.
-    function getYHOCards() {
-        getYuGiOhAllCards()
-            .then(data => {
-                setCards(data.data)
-            })
-            .catch(e => {
-                console.log(e)
-            })
-            .finally(() => {
-                setLoading(false)
-            })
-    }
-
-    // Get all monster cards
-    function getYHOMonsterCards() {
-        getYuGiOhMonsterCards()
-            .then(data => {
-                setCards(data.data)
-            })
-            .catch(e => {
-                console.log(e)
-            })
-            .finally(() => {
-                setLoading(false)
-            })
-    }
-
-    // Get all spells cards
-    function getYGOSpellCards() {
-        getYuGiOhSpellsCards()
-            .then( data => {
-                setCards( data.data )
-            } )
-            .catch( e => {
-                console.log( 'Error get spell cards' )
-                console.log( e )
-            } )
-            .finally( () => {
-                setLoading( false )
-            } )
-    }
-
-    // Get all trap cards
-    function getYGOTrapCards() {
-        getYuGiOhTrapCards()
-            .then( data => {
-                setCards( data.data )
-            })
-            .catch( e => {
-                console.log( 'Error get trap Cards' )
-                console.log( e )
-            } )
-            .finally( () => {
-                setLoading( false )
-            } )
-    }
+    /* Get params from URL */
+    const { categoryId } = useParams()
 
     useEffect(() => {
         setLoading(true)
 
-        if (typeId) {
-            switch (typeId) {
-                case 'Monsters':
-                    console.log('monsters')
-                    getYHOMonsterCards()
-                    break
-                case 'Spells':
-                    console.log( 'Spells' )
-                    getYGOSpellCards()
-                    break
-                case 'Traps':
-                    console.log( 'Traps' )
-                    getYGOTrapCards()
-                    break
-                default:
-                    console.log( 'default' )
-                    setCards([])
-                    break
-            }
-        } else {
-            getYHOCards()
+        function showProduct() {
+            getProducts()
+                .then(data => {
+                    if (categoryId) {
+                        setItems(data.filter(product => product.category === categoryId))
+                    } else {
+                        setItems(data)
+                    }
+                })
+                .catch(e => {
+                    console.error(e)
+                })
+                .finally(() => {
+                    setLoading(false)
+                })
         }
 
-    }, [typeId])
+        showProduct()
+    }, [categoryId])
 
-    //TODO: Presentasion de cargando componentes.
     if (loading) {
         return (
-            <div>
-                <h1>
-                    Loading
-                </h1>
-            </div>
+            <DivContainer>
+                <ItemListLoading />
+            </DivContainer>
         )
     }
 
     return (
-        <DivBody>
-            <ItemList {...{ cards }} />
-        </DivBody>
+        <DivContainer>
+            <ItemList {...{ items }} />
+        </DivContainer>
     )
 }
 
-const DivBody = styled.div`
+const DivContainer = styled.div`
     background-color: white;
     color: black;
     padding: 10px;
