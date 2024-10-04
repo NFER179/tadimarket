@@ -31,7 +31,7 @@ function OrderSummaryContent() {
 
     useEffect( () => {
         showOrders()
-    }, [] )
+    }, [orderId] )
 
     if( loading ) {
         return (
