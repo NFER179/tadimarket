@@ -36,11 +36,18 @@ function CartProvider( {children} ) {
         setCart( [] )
     }
 
+    // Function to delete a element from cart.
+    const deleteItemFromList = async ( itemId ) => {
+        const newProductList = cart.filter( item => item.id !== itemId )
+        setCart( newProductList )
+    }
+
     return (
-        <CartContext.Provider value={{ cart, addToCart, getTotal, cleanCart }}>
+        <CartContext.Provider value={{ cart, addToCart, getTotal, cleanCart, deleteItemFromList }}>
             {children}
         </CartContext.Provider>
     )
+
 }
 
 export default CartProvider

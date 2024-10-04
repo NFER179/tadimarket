@@ -70,7 +70,11 @@ function CheckoutForm() {
                         <InputForm type="email" id="email" name="email" required />
                         <span style={{ color: "gray" }}>Nunca compartiremos tu email.</span>
                     </DivFormGroup>
-                    <ButtonForm type="submit">Enviar</ButtonForm>
+                    {
+                        (cart.length === 0)
+                        ?<></>
+                        :<ButtonForm type="submit">Enviar</ButtonForm>
+                    }
                     <Modal isOpen={isModelOpen} onRequestClose={closeModal}>
                         <h2>Orden creada con exito</h2>
                         <p>Su id de orden es: {orderId}</p>

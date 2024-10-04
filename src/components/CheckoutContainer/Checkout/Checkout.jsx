@@ -1,12 +1,12 @@
 import styled from "styled-components"
-import CheckoutItemList from "./CheckoutItemList/CheckoutItemList"
 import CheckoutForm from "./CheckoutForm/CheckoutForm"
+import CheckoutItemListContainer from "./CheckoutItemListContainer/CheckoutItemListContainer"
 
 function Checkout() {
 
     return (
         <DivCheckout>
-            <CheckoutItemList />
+            <CheckoutItemListContainer />
             <CheckoutForm />
         </DivCheckout>
     )
